@@ -12,9 +12,11 @@ class MainApplication: Application() {
 
     override fun onCreate() {
         super.onCreate()
-//        startKoin {
-//            modules(applicationModule)
-//            }
+        startKoin {
+            androidLogger()
+            androidContext(this@MainApplication)
+            modules(applicationModule)
+            }
         setUpTimber()
     }
 

@@ -10,16 +10,18 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.lupin.myfirstmvvm.R
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.lupin.myfirstmvvm.Util.launchOnIoThread
+import kotlinx.android.synthetic.main.fragment_todo.*
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
+
 
 class TodoActivity : Fragment(){
 
 //    val viewModel : TodoViewModel by inject()
 
-    private lateinit var viewModel : TodoViewModel
+    val todoViewModel : TodoViewModel by viewModel()
     private lateinit var viewModelFactory : TodoViewmodelFactory
     lateinit var rootView : View
 
@@ -29,29 +31,29 @@ class TodoActivity : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_todo,container,false)
-        viewModelFactory = TodoViewmodelFactory()
-        viewModel = ViewModelProviders.of(this,viewModelFactory).get(TodoViewModel::class.java)
+//        viewModelFactory = TodoViewmodelFactory()
+//        viewModel = ViewModelProviders.of(this,viewModelFactory).get(TodoViewModel::class.java)
 
-        viewModel.errorMessage.observe(this, Observer {
+        todoViewModel.errorMessage.observe(this, Observer {
             Timber.d("TEST ERROR MESSAGE = $it")
+            txt1.text = it
         })
 
-        viewModel.todoList.observe(this, Observer {
+        todoViewModel.todoList.observe(this, Observer {
             Timber.d(it.toString())
+            txt1.text = it.toString()
         })
-
         return rootView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        CoroutineScope(Dispatchers.IO).launch {
+        launchOnIoThread{
             getTodoList()
         }
     }
-
      private suspend fun getTodoList(){
-            viewModel.fetchTodoList()
+         todoViewModel.fetchTodoList()
     }
 
 

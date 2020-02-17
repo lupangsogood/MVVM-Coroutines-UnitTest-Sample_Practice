@@ -12,7 +12,7 @@ import kotlin.coroutines.CoroutineContext
 
 open class BaseViewModel: ViewModel(){
 
-    fun cancelJob(){
+    private fun cancelJob(){
         viewModelScope.coroutineContext.cancelChildren()
     }
 
