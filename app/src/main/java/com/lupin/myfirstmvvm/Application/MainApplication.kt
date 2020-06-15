@@ -14,7 +14,7 @@ class MainApplication: Application() {
         super.onCreate()
         startKoin {
             androidLogger()
-            androidContext(this@MainApplication)
+            androidContext(applicationContext)
             modules(applicationModule)
             }
         setUpTimber()

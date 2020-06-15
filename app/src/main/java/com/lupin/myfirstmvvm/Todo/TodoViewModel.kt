@@ -2,28 +2,26 @@ package com.lupin.myfirstmvvm.Todo
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.lupin.myfirstmvvm.BaseViewModel
+import com.lupin.myfirstmvvm.Data.Result
 import com.lupin.myfirstmvvm.Data.entities.Todo
-import com.lupin.myfirstmvvm.Data.repository.TodoRepository
 import com.lupin.myfirstmvvm.Data.repository.impl.TodoServiceImpl
-import com.lupin.myfirstmvvm.Util.UseCaseResult
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import com.lupin.myfirstmvvm.SharePreference.Sharepreference
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 
-class TodoViewModel(val todoService:TodoServiceImpl) : BaseViewModel(){
+class TodoViewModel(val todoService:TodoServiceImpl,val sharePref:Sharepreference?) : BaseViewModel(){
 
     init {
         Timber.d("ViewModel Created")
+        sharePref?.putString("123","456")
+        Timber.d(sharePref?.getString("123"))
     }
     private val _todoList = MutableLiveData<Todo>()
+
     val todoList : LiveData<Todo>
         get() = _todoList
 
@@ -34,10 +32,17 @@ class TodoViewModel(val todoService:TodoServiceImpl) : BaseViewModel(){
     suspend fun fetchTodoList() = withContext(IO){
        val result = todoService.getTodo()
         withContext(Main){
-            when(result){
-                is UseCaseResult.Success -> _todoList.value = result.data
-                is UseCaseResult.Error -> _errorMessage.value = result.exception.message
+            when(result.isSuccessful()){
+                 true  -> {
+                     _todoList.value = result.data
+                        Timber.d("SUCCESS")
+                 }
+                 false -> {_errorMessage.value = result.message
+                     Timber.d("ERROR")
+                 }
             }
         }
     }
+
+
 }

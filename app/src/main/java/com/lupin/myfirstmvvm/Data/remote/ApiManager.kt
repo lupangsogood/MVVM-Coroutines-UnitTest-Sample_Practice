@@ -28,7 +28,5 @@ object ApiManager {
             .build()
     }
 
-
-
     val callApi: ApiService = retrofit.create(ApiService::class.java)
 }

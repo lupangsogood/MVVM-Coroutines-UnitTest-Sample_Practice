@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
  * Build main thread with new coroutine scope.
  * @param block the coroutine code
  */
-fun launchOnMainThread(delay: Long = 0, block: suspend CoroutineScope.() -> Unit) {
+fun launchOnMainThread(delay: Long = 0, block: suspend  CoroutineScope.() -> Unit) {
     CoroutineScope(Dispatchers.Main).launch {
         kotlinx.coroutines.delay(delay)
         block()
@@ -89,7 +89,7 @@ fun Fragment.launchOnMainThread(delay: Long = 0, block: suspend CoroutineScope.(
 /**
  * Build background thread with fragment lifecycle scope.
  */
-fun Fragment.launchOnIoThread(block: suspend CoroutineScope.() -> Unit) {
+fun Fragment.launchOnIoThread(block: suspend  CoroutineScope.() -> Unit) {
     if (view == null || isAdded.not()) return
     viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
         block()

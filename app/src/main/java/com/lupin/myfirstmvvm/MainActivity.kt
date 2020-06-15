@@ -2,10 +2,7 @@ package com.lupin.myfirstmvvm
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.FragmentManager
-import com.lupin.myfirstmvvm.R
-import com.lupin.myfirstmvvm.Todo.TodoActivity
-import kotlinx.android.synthetic.main.activity_main.*
+import com.lupin.myfirstmvvm.Todo.TodoScreen
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,7 +11,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val fragmentManger = supportFragmentManager.beginTransaction()
-        fragmentManger.replace(R.id.mainContainer,TodoActivity())
+        fragmentManger.replace(R.id.mainContainer,TodoScreen())
         fragmentManger.commit()
     }
 }
